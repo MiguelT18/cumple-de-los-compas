@@ -1,5 +1,6 @@
 import { defineAction } from "astro:actions";
 import { studentSchema } from "../lib/schemas";
+import client from "../lib/mongodb";
 
 // Extrae IP real del cliente evitando spoofing básico.
 function getClientIp(ctx: any): string {
@@ -22,7 +23,21 @@ export const server = {
       const ip = getClientIp(context);
       console.log("IP del cliente:", ip);
       console.log("Datos del formulario:", input);
-      return { success: true };
+
+      await client.connect();
+      const db = client.db("students_db");
+      const collection = db.collection("students");
+      const createdAt = new Date();
+      const result = await collection.insertOne({ ...input, ip, createdAt });
+
+      return {
+        success: true,
+        student: {
+          _id: result.insertedId.toString(),
+          ...input,
+          createdAt,
+        },
+      };
     },
   }),
 };
