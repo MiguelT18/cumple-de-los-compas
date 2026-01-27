@@ -3,21 +3,27 @@ import { defineConfig, envField } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import icon from "astro-icon";
 
+import vercel from "@astrojs/vercel";
+
 // https://astro.build/config
 export default defineConfig({
   output: "server",
+
   env: {
     schema: {
       MONGODB_URI: envField.string({ context: "server", access: "secret" }),
       MONGODB_NAME: envField.string({ context: "server", access: "public" }),
     },
   },
+
   devToolbar: {
     enabled: false,
   },
+
   vite: {
     plugins: [tailwindcss()],
   },
+
   integrations: [
     icon({
       include: {
@@ -27,4 +33,6 @@ export default defineConfig({
       },
     }),
   ],
+
+  adapter: vercel(),
 });
