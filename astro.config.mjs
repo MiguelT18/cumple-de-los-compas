@@ -1,15 +1,27 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-import tailwindcss from '@tailwindcss/vite';
+import tailwindcss from "@tailwindcss/vite";
 
-import icon from 'astro-icon';
+import icon from "astro-icon";
 
 // https://astro.build/config
 export default defineConfig({
-  vite: {
-    plugins: [tailwindcss()]
+  devToolbar: {
+    enabled: false,
   },
 
-  integrations: [icon()]
+  vite: {
+    plugins: [tailwindcss()],
+  },
+
+  integrations: [
+    icon({
+      include: {
+        charm: ["graduate-cap"],
+        mingcute: ["user-add-line"],
+        lucide: ["users"],
+      },
+    }),
+  ],
 });

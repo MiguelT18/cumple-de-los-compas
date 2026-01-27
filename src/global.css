@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+:root {
+  --u: calc(1rem / 1.6);
+}
+
+body {
+  font-family: "Exo 2 Variable", sans-serif;
+}
+
+@theme {
+  --text-xs: clamp(calc(1.2 * var(--u)), 0.75rem + 0.5vw, calc(1.5 * var(--u)));
+  --text-sm: clamp(calc(1.6 * var(--u)), 0.75rem + 0.5vw, calc(1.8 * var(--u)));
+  --text-md: clamp(calc(1.8 * var(--u)), 0.75rem + 1vw, calc(2 * var(--u)));
+  --text-lg: clamp(calc(2.6 * var(--u)), 0.75rem + 2vw, calc(3 * var(--u)));
+  --text-xl: clamp(calc(3.8 * var(--u)), 0.75rem + 3vw, calc(4 * var(--u)));
+}
+
+@theme {
+  --color-primary: #2664eb;
+
+  --color-background: #edf4fc;
+
+  --color-text-dark: #111826;
+  --color-text-regular: #374152;
+  --color-text-medium: #4c5663;
+  --color-text-light: #69707d;
+}

@@ -1,5 +1,6 @@
 ---
-
+import "../global.css";
+import { Icon } from "astro-icon/components";
 ---
 
 <html lang="es">
@@ -8,9 +9,338 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
+    <title>Locos Informáticos</title>
   </head>
-  <body>
-    <h1>Astro</h1>
+  <body class="bg-background">
+    <main class="container max-w-[980px] mx-auto max-md:pb-5">
+      <div
+        class="w-full flex flex-col items-center justify-center gap-1 mb-4 pt-5 px-5"
+      >
+        <h1
+          class="flex items-center gap-2 text-lg font-bold text-text-dark text-center"
+        >
+          <Icon name="charm:graduate-cap" class="size-10 text-primary" />
+          Locos Informáticos
+        </h1>
+        <p class="text-text-medium text-sm text-center">
+          Directorio de estudiantes de la carrera de Informática de la
+          Universidad Autónoma Juan Misael Saracho
+        </p>
+      </div>
+
+      <section class="flex items-stretch max-md:flex-col gap-4 px-4">
+        <article class="bg-white p-4 rounded-xl w-full h-auto">
+          <h2
+            class="flex items-center gap-2 text-md font-medium font-sans text-text-dark mb-4"
+          >
+            <Icon name="mingcute:user-add-line" class="size-5 text-primary" />
+            Únete al Grupo
+          </h2>
+
+          <form
+            method="POST"
+            class="h-full flex flex-col gap-2"
+            id="student-form"
+          >
+            <div class="flex flex-col gap-1">
+              <label for="full_name" class="text-text-medium">
+                Nombre completo
+              </label>
+              <input
+                type="text"
+                name="full_name"
+                id="full_name"
+                placeholder="John Doe"
+                class="p-2 rounded-md border-gray-400 border outline-primary hover:border-primary/80 transition-colors focus:border-2 focus:outline-primary cursor-pointer"
+              />
+              <span
+                class="error-message text-red-500 text-xs hidden"
+                data-field="full_name"></span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="gender" class="text-text-medium"> Género </label>
+              <select
+                name="gender"
+                id="gender"
+                class="p-2 rounded-md border-gray-400 border outline-primary hover:border-primary/80 transition-colors focus:border-2 focus:outline-primary cursor-pointer"
+              >
+                <option value="">Selecciona un género</option>
+                <option value="male">Masculino</option>
+                <option value="female">Femenino</option>
+                <option value="other">Prefiero no decirlo</option>
+              </select>
+              <span
+                class="error-message text-red-500 text-xs hidden"
+                data-field="gender"></span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="born_at" class="text-text-medium">
+                Fecha de nacimiento
+              </label>
+              <input
+                type="date"
+                name="born_at"
+                id="born_at"
+                class="p-2 rounded-md border-gray-400 border outline-primary hover:border-primary/80 transition-colors focus:border-2 focus:outline-primary cursor-pointer"
+              />
+              <span
+                class="error-message text-red-500 text-xs hidden"
+                data-field="born_at"></span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="phone" class="text-text-medium"> Teléfono </label>
+              <input
+                type="tel"
+                name="phone"
+                id="phone"
+                value="+591 "
+                placeholder="+591 61234567"
+                class="p-2 rounded-md border-gray-400 border outline-primary hover:border-primary/80 transition-colors focus:border-2 focus:outline-primary cursor-pointer"
+              />
+              <span
+                class="error-message text-red-500 text-xs hidden"
+                data-field="phone"></span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="email" class="text-text-medium">
+                Correo electrónico
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="user@example.com"
+                class="p-2 rounded-md border-gray-400 border outline-primary hover:border-primary/80 transition-colors focus:border-2 focus:outline-primary cursor-pointer"
+              />
+              <span
+                class="error-message text-red-500 text-xs hidden"
+                data-field="email"></span>
+            </div>
+
+            <div id="form-error" class="text-red-500 text-sm hidden"></div>
+            <div id="form-success" class="text-green-600 text-sm hidden"></div>
+
+            <button
+              type="submit"
+              class="py-3 bg-primary rounded-md text-white w-full mt-3 cursor-pointer outline-0 hover:bg-primary/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              id="submit-btn"
+            >
+              Agregar mi información
+            </button>
+          </form>
+        </article>
+
+        <article class="bg-white p-4 rounded-xl w-full h-auto flex flex-col">
+          <div class="flex flex-col gap-1">
+            <h2
+              class="flex items-center gap-2 text-md font-medium font-sans text-text-dark"
+            >
+              <Icon name="lucide:users" class="text-primary size-5" />
+              Estudiantes de Ing. Informática
+            </h2>
+            <span class="text-text-medium text-xs text-end w-full inline-block"
+              >(0 estudiantes)</span
+            >
+          </div>
+
+          <div class="min-h-[200px] h-full grid place-content-center py-4">
+            <p class="block text-center text-text-light text-xs text-balance">
+              Aún no hay estudiantes registrados. ¡Sé el primero en unirte!
+            </p>
+          </div>
+        </article>
+      </section>
+    </main>
   </body>
 </html>
+
+<script>
+  import { studentSchema } from "../lib/schemas";
+  import { actions } from "astro:actions";
+
+  const form = document.getElementById("student-form") as HTMLFormElement;
+  const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement;
+  const formError = document.getElementById("form-error") as HTMLDivElement;
+  const formSuccess = document.getElementById("form-success") as HTMLDivElement;
+  const phoneInput = document.getElementById("phone") as HTMLInputElement;
+
+  phoneInput.addEventListener("input", (e) => {
+    let value = phoneInput.value;
+
+    // Si empieza con +591 pero no tiene espacio, agrega el espacio
+    if (/^\+591(?!\s)/.test(value)) {
+      const cursorPos = phoneInput.selectionStart ?? value.length;
+      value = value.replace(/^\+591(?!\s)/, "+591 ");
+      phoneInput.value = value;
+
+      // Ajustar la posición del cursor para que no salte al final
+      const newCursorPos = cursorPos + 1;
+      phoneInput.setSelectionRange(newCursorPos, newCursorPos);
+    }
+
+    // prevenir que borre el +591
+    if (!value.startsWith("+591")) {
+      phoneInput.value = "+591 ";
+    }
+  });
+
+  if (!form || !submitBtn || !formError || !formSuccess) {
+    console.error("No se encontraron los elementos del formulario");
+  } else {
+    // Función para limpiar errores
+    const clearErrors = () => {
+      const errorMessages = form.querySelectorAll(".error-message");
+      errorMessages.forEach((span) => {
+        span.classList.add("hidden");
+      });
+      formError.classList.add("hidden");
+      formSuccess.classList.add("hidden");
+    };
+
+    // Función para mostrar errores de validación
+    const showValidationErrors = (
+      errors: Record<string, string[] | undefined>,
+    ) => {
+      const errorMessages = form.querySelectorAll(".error-message");
+      errorMessages.forEach((span) => {
+        const field = span.getAttribute("data-field");
+        if (field && errors[field]) {
+          span.textContent = errors[field]?.[0] || "";
+          span.classList.remove("hidden");
+        }
+      });
+
+      // Resaltar campos con error
+      Object.keys(errors).forEach((field) => {
+        const input = form.querySelector(`[name="${field}"]`) as
+          | HTMLInputElement
+          | HTMLSelectElement;
+        if (input) {
+          input.classList.add("border-red-500");
+        }
+      });
+    };
+
+    // Manejar envío del formulario
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearErrors();
+
+      const formData = new FormData(form);
+
+      const data = {
+        full_name: formData.get("full_name")?.toString() ?? "",
+        gender: formData.get("gender")?.toString() ?? "",
+        born_at: formData.get("born_at")?.toString() ?? "",
+        phone: formData.get("phone")?.toString() ?? "",
+        email: formData.get("email")?.toString() ?? "",
+      };
+
+      // Validar con Zod
+      const validationResult = studentSchema.safeParse(data);
+
+      if (!validationResult.success) {
+        const errors = validationResult.error.flatten().fieldErrors;
+        showValidationErrors(errors);
+        return;
+      }
+
+      const validData = validationResult.data;
+
+      // Si la validación pasa, enviar al servidor
+      submitBtn.textContent = "Enviando...";
+      submitBtn.disabled = true;
+
+      try {
+        const result = await actions.sendForm(validData);
+
+        if (result.error) {
+          formError.textContent =
+            result.error.message || "Error al procesar el formulario";
+          formError.classList.remove("hidden");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Agregar información";
+
+          if ((result.error as any).issues) {
+            showValidationErrors((result.error as any).issues);
+          }
+        } else if (result.data) {
+          formSuccess.textContent = "Estudiante agregado correctamente";
+          formSuccess.classList.remove("hidden");
+          form.reset();
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Agregar mi información";
+
+          setTimeout(() => {
+            formSuccess.classList.add("hidden");
+          }, 5000);
+        }
+      } catch (err) {
+        formError.textContent =
+          "Error de conexión. Por favor, intenta nuevamente.";
+        formError.classList.remove("hidden");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Agregar mi información";
+        // console.error("Error al enviar formulario:", err);
+      } finally {
+        submitBtn.textContent = "Agregar mi información";
+        submitBtn.disabled = false;
+      }
+
+      /*
+      try {
+        const result = await studentsActions.createStudent(new FormData(form));
+
+        if (result.error) {
+          formError.textContent =
+            result.error.message || "Error al procesar el formulario";
+          formError.classList.remove("hidden");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Agregar mi información";
+
+          // Mostrar errores de campos específicos si existen
+          if ((result.error as any).issues) {
+            showValidationErrors((result.error as any).issues);
+          }
+        } else if (result.data) {
+          formSuccess.textContent =
+            result.data.message || "Estudiante agregado correctamente";
+          formSuccess.classList.remove("hidden");
+          form.reset();
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Agregar mi información";
+
+          // Ocultar mensaje de éxito después de 5 segundos
+          setTimeout(() => {
+            formSuccess.classList.add("hidden");
+          }, 5000);
+        }
+      } catch (error) {
+        formError.textContent =
+          "Error de conexión. Por favor, intenta nuevamente.";
+        formError.classList.remove("hidden");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Agregar mi información";
+        console.error("Error al enviar formulario:", error);
+      }*/
+    });
+
+    // Limpiar errores cuando el usuario empieza a escribir
+    form.addEventListener("input", (e) => {
+      const target = e.target as HTMLInputElement | HTMLSelectElement;
+      if (target && target.name) {
+        target.classList.remove("border-red-500");
+        const errorSpan = form.querySelector(
+          `[data-field="${target.name}"]`,
+        ) as HTMLSpanElement;
+        if (errorSpan) {
+          errorSpan.classList.add("hidden");
+        }
+      }
+    });
+  }
+</script>
